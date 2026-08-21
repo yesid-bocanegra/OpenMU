@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+usage() {
+  cat >&2 <<'EOF'
+Usage: ./deploy/ctl <deployment> <action>
+
+Deployments:
+  aio       Use HTTP-only deploy/all-in-one with .env configuration
+  traefik   Use deploy/all-in-one-traefik production configuration
+
+Actions:
+  pull      Download images configured by Docker Compose
+  build     Build src/Startup/Dockerfile as local munique/openmu image
+  deploy    Pull images, then create or start containers
+  rebuild   Build local OpenMU image, then create or start containers
+  restart   Restart existing containers without rebuilding
+  down      Stop and remove containers; preserve named volumes
+  logs      Follow logs from all deployment services
+  status    Show current service and container status
+
+Examples:
+  ./deploy/ctl aio deploy
+  ./deploy/ctl aio rebuild
+  ./deploy/ctl traefik deploy
+  ./deploy/ctl traefik logs
+EOF
+}
+
+if [[ $# -ne 2 ]]; then
+  usage
+  exit 2
+fi
+
+deployment=$1
+action=$2
+root_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
+
+case "$deployment" in
+  aio)
+    compose_dir="$root_dir/deploy/all-in-one"
+    compose_options=(--env-file .env -f docker-compose.yml)
+    ;;
+  traefik)
+    compose_dir="$root_dir/deploy/all-in-one-traefik"
+    compose_options=(-f docker-compose.prod.yml)
+    ;;
+  *)
+    printf 'Unsupported deployment: %s\n' "$deployment" >&2
+    usage
+    exit 2
+    ;;
+esac
+
+case "$action" in
+  pull|build|deploy|rebuild|restart|down|logs|status) ;;
+  *)
+    printf 'Unsupported action: %s\n' "$action" >&2
+    usage
+    exit 2
+    ;;
+esac
+
+if ! command -v docker >/dev/null 2>&1; then
+  printf 'Docker command not found.\n' >&2
+  exit 1
+fi
+
+if ! docker compose version >/dev/null 2>&1; then
+  printf 'Docker Compose plugin unavailable.\n' >&2
+  exit 1
+fi
+
+if [[ "$deployment" == "aio" && "$action" != "build" && ! -f "$compose_dir/.env" ]]; then
+  printf 'Missing %s/.env; copy .env.example and configure it.\n' "$compose_dir" >&2
+  exit 1
+fi
+
+if [[ "$deployment" == "traefik" && "$action" =~ ^(deploy|rebuild|restart)$ ]]; then
+  if [[ ! -f "$compose_dir/.env" ]]; then
+    printf 'Missing %s/.env; copy .env.example and configure it.\n' "$compose_dir" >&2
+    exit 1
+  fi
+
+  if ! docker network inspect proxy >/dev/null 2>&1; then
+    printf 'Missing Docker network: proxy. Create it with: docker network create proxy\n' >&2
+    exit 1
+  fi
+fi
+
+compose() {
+  (cd "$compose_dir" && docker compose "${compose_options[@]}" "$@")
+}
+
+build_image() {
+  docker build -t munique/openmu -f "$root_dir/src/Startup/Dockerfile" "$root_dir/src"
+}
+
+case "$action" in
+  pull)
+    compose pull
+    ;;
+  build)
+    build_image
+    ;;
+  deploy)
+    compose pull
+    compose up -d --no-build --remove-orphans
+    ;;
+  rebuild)
+    build_image
+    compose up -d --no-build --remove-orphans
+    ;;
+  restart)
+    compose restart
+    ;;
+  down)
+    compose down --remove-orphans
+    ;;
+  logs)
+    compose logs -f
+    ;;
+  status)
+    compose ps
+    ;;
+esac

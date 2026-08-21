@@ -3,7 +3,7 @@ services:
     image: nginx:alpine
     container_name: nginx-80
     ports:
-      - "80:80"
+      - "${HTTP_PORT:?Set HTTP_PORT in .env}:80"
     volumes:
       - ./nginx/nginx.dev.conf:/etc/nginx/nginx.conf:ro
     depends_on:
@@ -26,6 +26,7 @@ services:
     environment:
       DB_HOST: database
       ASPNETCORE_URLS: http://+:8080
+      RESOLVE_IP: ${RESOLVE_IP:?Set RESOLVE_IP in .env}
       # Optional bootstrap admin panel user. Without it, the admin panel is reachable
       # without a login until the first user has been created within the panel itself.
       OPENMU_ADMIN_USER: ${OPENMU_ADMIN_USER:-}

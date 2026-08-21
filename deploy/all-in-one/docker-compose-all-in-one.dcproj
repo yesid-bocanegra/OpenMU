@@ -11,6 +11,7 @@
     <DockerServiceName>openmu-startup</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".env.example" />
     <None Include="docker-compose.override.yml">
       <DependentUpon>docker-compose.yml</DependentUpon>
     </None>
@@ -19,6 +20,7 @@
     </None>
     <None Include="docker-compose.yml" />
     <None Include=".dockerignore" />
+    <None Include=".gitignore" />
     <None Include="nginx\nginx.dev.conf" />
     <None Include="nginx\nginx.prod443.conf" />
     <None Include="nginx\nginx.prod80.conf" />
