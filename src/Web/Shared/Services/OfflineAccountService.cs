@@ -5,6 +5,7 @@
 namespace MUnique.OpenMU.Web.Shared.Services;
 
 using MUnique.OpenMU.GameLogic;
+using MUnique.OpenMU.GameLogic.PlugIns.ChatCommands;
 using MUnique.OpenMU.Interfaces;
 
 /// <summary>
@@ -43,22 +44,50 @@ public class OfflineAccountService : IDataService<OfflineAccount>, ISupportDataC
         this.DataChanged?.Invoke(this, EventArgs.Empty);
     }
 
-    /// <inheritdoc />
-    public Task<List<OfflineAccount>> GetAsync(int offset, int count)
+    /// <summary>
+    /// Determines whether the <c>/offlevel</c> chat command plugin is active on any in-process game server.
+    /// </summary>
+    public bool IsOfflevelFeatureAvailable()
     {
-        var result = this._serverProvider.Servers
+        return this._serverProvider.Servers
+            .OfType<IGameServerContextProvider>()
+            .Any(s => s.Context.PlugInManager.IsPlugInActive(typeof(OfflineLevelingChatCommandPlugIn)));
+    }
+
+    /// <inheritdoc />
+    public async Task<List<OfflineAccount>> GetAsync(int offset, int count)
+    {
+        // Note: bots never show up here - they are managed by the BotManager, not the OfflinePlayerManager.
+        // Materialized once: guild names resolve in bulk afterwards, and a second snapshot could disagree.
+        var rows = this._serverProvider.Servers
             .OfType<IGameServerContextProvider>()
             .SelectMany(s => s.Context.OfflinePlayerManager
                 .OfflinePlayers
-                .Select(p => new OfflineAccount(
-                    p.AccountLoginName ?? string.Empty,
-                    (byte)((IManageableServer)s).Id,
-                    p.StartTimestamp)))
-            .OrderBy(a => a.LoginName)
+                .Select(p => (ServerId: (byte)((IManageableServer)s).Id, Player: p)))
+            .ToList();
+
+        var guilds = await GuildNames.ResolveAsync(
+                GuildNames.FindServer(this._serverProvider),
+                rows.Select(r => r.Player.GuildStatus?.GuildId).OfType<uint>())
+            .ConfigureAwait(false);
+
+        return rows
+            .Select(r =>
+            {
+                var (partyMaster, partySize) = PartyDisplay.From(r.Player.Party);
+                var guildId = r.Player.GuildStatus?.GuildId;
+                return new OfflineAccount(
+                    r.Player.AccountLoginName ?? string.Empty,
+                    r.ServerId,
+                    r.Player.StartTimestamp,
+                    r.Player.SelectedCharacter?.Name,
+                    guildId is { } id ? guilds.GetValueOrDefault(id)?.Name : null,
+                    partyMaster,
+                    partySize);
+            })
+            .OrderPartyGrouped()
             .Skip(offset)
             .Take(count)
             .ToList();
-
-        return Task.FromResult(result);
     }
 }

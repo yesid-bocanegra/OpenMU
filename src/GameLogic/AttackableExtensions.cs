@@ -232,15 +232,18 @@ public static class AttackableExtensions
                 dmg += (int)skillAttributes[Stats.SkillFinalDamageBonus];
 
                 var skillMultiplier = skillAttributes[Stats.SkillFinalMultiplier];
-                if (skillMultiplier > 0)
+                var pveSkillMultiplier = skillAttributes[Stats.SkillFinalMultiplierPve];
+                if (!isPvp && pveSkillMultiplier > 0)
+                {
+                    multiplier = pveSkillMultiplier;
+                }
+                else if (skillMultiplier > 0)
                 {
                     multiplier = skillMultiplier;
-
-                    // DragonSlasher.
-                    if (skill.Skill!.Number == 265 && !isPvp)
-                    {
-                        multiplier *= 3;
-                    }
+                }
+                else
+                {
+                    // The skill doesn't define a final multiplier, so the general skill multiplier applies.
                 }
             }
 
@@ -422,7 +425,7 @@ public static class AttackableExtensions
         var applied = false;
 
         if (skillEntry.Skill.MagicEffectDef is { } effectDefinition
-            && !target.MagicEffectList.ActiveEffects.ContainsKey(effectDefinition.Number))
+            && !target.MagicEffectList.ContainsEffect(effectDefinition.Number))
         {
             // power-up is the wrong term here... it's more like a power-down ;-)
             await target.ApplyMagicEffectAsync(attacker, skillEntry, hitInfo).ConfigureAwait(false);
@@ -470,7 +473,7 @@ public static class AttackableExtensions
         var applied = false;
 
         if (skill.MagicEffectDef is { } effectDefinition
-            && !target.MagicEffectList.ActiveEffects.ContainsKey(effectDefinition.Number)
+            && !target.MagicEffectList.ContainsEffect(effectDefinition.Number)
             && duration is not null
             && powerUps.Count > 0)
         {
@@ -634,6 +637,26 @@ public static class AttackableExtensions
         var powerUp = attackable.Attributes.CreateElement(stunEffectDefinition.PowerUpDefinitions.First(pu => pu.TargetAttribute == Stats.IsStunned));
         var magicEffect = new MagicEffect(TimeSpan.FromSeconds(2), stunEffectDefinition, [new MagicEffect.ElementWithTarget(powerUp, Stats.IsStunned)]);
         await attackable.MagicEffectList.AddEffectAsync(magicEffect).ConfigureAwait(false);
+    }
+
+    /// <summary>
+    /// Applies the stun effect to the player for the specified duration, e.g. by a skill of a monster.
+    /// </summary>
+    /// <param name="target">The player.</param>
+    /// <param name="duration">The duration of the stun.</param>
+    /// <returns>A task representing the asynchronous operation.</returns>
+    public static async ValueTask ApplyStunEffectAsync(this Player target, TimeSpan duration)
+    {
+        if (target.Attributes is not { } attributes
+            || target.GameContext.Configuration.MagicEffects.FirstOrDefault(m => m.Number == StunnedMagicEffectNumber) is not { } effectDefinition
+            || effectDefinition.PowerUpDefinitions.FirstOrDefault(pu => pu.TargetAttribute == Stats.IsStunned) is not { } powerUpDefinition)
+        {
+            return;
+        }
+
+        var powerUp = attributes.CreateElement(powerUpDefinition);
+        var magicEffect = new MagicEffect(duration, effectDefinition, [new MagicEffect.ElementWithTarget(powerUp, Stats.IsStunned)]);
+        await target.MagicEffectList.AddEffectAsync(magicEffect).ConfigureAwait(false);
     }
 
     /// <summary>
@@ -907,13 +930,13 @@ public static class AttackableExtensions
         }
         else if (magicEffectDefinition.PowerUpDefinitions.Any(e => e.TargetAttribute == Stats.IsBleeding))
         {
-            if (hitInfo is not { } hit || hit.HealthDamage + hit.ShieldDamage < 1)
+            if (hitInfo is not { } hit || hit.TotalDamage < 1)
             {
                 return;
             }
 
             var multiplier = magicEffectDefinition.Number == ExplosionMagicEffectNumber ? attacker.Attributes[Stats.BleedingDamageMultiplier] : 0.6f;
-            var damage = (hit.HealthDamage + hit.ShieldDamage) * multiplier;
+            var damage = hit.TotalDamage * multiplier;
             magicEffect = new BleedingMagicEffect(powerUps[0].Boost, magicEffectDefinition, durationSpan, attacker, target, damage);
         }
         else if (magicEffectDefinition.PowerUpDefinitions.Any(e => e.TargetAttribute == Stats.IsStunned))
@@ -932,7 +955,7 @@ public static class AttackableExtensions
         }
 
         if (magicEffect.Definition.SubType > 0
-            && await target.MagicEffectList.TryGetActiveEffectOfSubTypeAsync(magicEffect.Definition.SubType).ConfigureAwait(false) is { } existingEffect
+            && target.MagicEffectList.TryGetActiveEffectOfSubType(magicEffect.Definition.SubType) is { } existingEffect
             && existingEffect.Id != magicEffect.Id)
         {
             // The new effect replaces an existing effect with a different number

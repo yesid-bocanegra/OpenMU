@@ -39,10 +39,12 @@ const sidebars = {
         'admin-panel/overview',
         'admin-panel/setup',
         'admin-panel/configuration-updates',
+        'admin-panel/configuration-captions',
         'admin-panel/servers',
         'admin-panel/accounts',
         'admin-panel/online-accounts',
         'admin-panel/game-configuration',
+        'admin-panel/item-drops',
         'admin-panel/plugins',
         'admin-panel/chat-commands',
         'admin-panel/map-editor',
@@ -59,6 +61,7 @@ const sidebars = {
       items: [
         'server-features/bots',
         'server-features/test-actors',
+        'server-features/gens',
       ],
     },
     {

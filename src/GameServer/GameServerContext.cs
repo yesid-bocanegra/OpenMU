@@ -44,6 +44,7 @@ public class GameServerContext : GameContext, IGameServerContext
     /// <param name="plugInManager">The plug in manager.</param>
     /// <param name="dropGenerator">The drop generator.</param>
     /// <param name="changeMediator">The change mediator.</param>
+    /// <param name="mapHostLocator">The locator for the maps which are hosted by other game servers.</param>
     public GameServerContext(
         GameServerDefinition gameServerDefinition,
         IGuildServer guildServer,
@@ -55,7 +56,8 @@ public class GameServerContext : GameContext, IGameServerContext
         ILoggerFactory loggerFactory,
         PlugInManager plugInManager,
         IDropGenerator dropGenerator,
-        IConfigurationChangeMediator changeMediator)
+        IConfigurationChangeMediator changeMediator,
+        IMapHostLocator? mapHostLocator = null)
         : base(
             gameServerDefinition.GameConfiguration ?? throw new InvalidOperationException("GameServerDefinition requires a GameConfiguration"),
             persistenceContextProvider,
@@ -71,6 +73,7 @@ public class GameServerContext : GameContext, IGameServerContext
         this.EventPublisher = eventPublisher;
         this.LoginServer = loginServer;
         this.FriendServer = friendServer;
+        this.MapHostLocator = mapHostLocator;
         this.ServerConfiguration = gameServerDefinition.ServerConfiguration ?? throw new InvalidOperationException("GameServerDefinition requires a ServerConfiguration");
     }
 
@@ -101,6 +104,9 @@ public class GameServerContext : GameContext, IGameServerContext
 
     /// <inheritdoc/>
     public GameServerConfiguration ServerConfiguration { get; }
+
+    /// <inheritdoc/>
+    public IMapHostLocator? MapHostLocator { get; }
 
     /// <inheritdoc />
     public override float ExperienceRate => base.ExperienceRate * this._gameServerDefinition.ExperienceRate;
@@ -222,7 +228,13 @@ public class GameServerContext : GameContext, IGameServerContext
         var guildId = guildMember.GuildStatus.GuildId;
         var guildList = this._playersByGuild.GetOrAdd(guildId, id => new LockableList<Player>());
         using var writeLock = await guildList.Lock.WriterLockAsync();
-        guildList.Add(guildMember);
+
+        // Membership changes (e.g. role assignments) re-publish the guild assignment,
+        // so registration must be idempotent to avoid duplicate broadcasts and stale entries.
+        if (!guildList.Contains(guildMember))
+        {
+            guildList.Add(guildMember);
+        }
     }
 
     /// <inheritdoc />

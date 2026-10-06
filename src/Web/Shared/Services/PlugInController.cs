@@ -20,6 +20,7 @@ public class PlugInController : IDataService<PlugInConfigurationViewItem>, ISupp
 {
     private readonly IDataSource<GameConfiguration> _dataSource;
     private readonly IModalService _modalService;
+    private readonly IPersistenceContextProvider _persistenceContextProvider;
 
     private Guid _pointFilter;
     private string _nameFilter = string.Empty;
@@ -30,10 +31,12 @@ public class PlugInController : IDataService<PlugInConfigurationViewItem>, ISupp
     /// </summary>
     /// <param name="dataSource">The data source.</param>
     /// <param name="modalService">The modal service.</param>
-    public PlugInController(IDataSource<GameConfiguration> dataSource, IModalService modalService)
+    /// <param name="persistenceContextProvider">The persistence context provider.</param>
+    public PlugInController(IDataSource<GameConfiguration> dataSource, IModalService modalService, IPersistenceContextProvider persistenceContextProvider)
     {
         this._dataSource = dataSource;
         this._modalService = modalService;
+        this._persistenceContextProvider = persistenceContextProvider;
     }
 
     /// <inheritdoc />
@@ -99,11 +102,11 @@ public class PlugInController : IDataService<PlugInConfigurationViewItem>, ISupp
                 var customContainer = group.Key?.GetCustomAttribute<CustomPlugInContainerAttribute>();
                 if (plugInPoint != null)
                 {
-                    dto.Name = plugInPoint.Name;
+                    dto.Name = PlugInPointCaption.Get(plugInPoint.Name);
                 }
                 else if (customContainer != null)
                 {
-                    dto.Name = customContainer.Name;
+                    dto.Name = PlugInPointCaption.Get(customContainer.Name);
                 }
                 else
                 {
@@ -194,6 +197,8 @@ public class PlugInController : IDataService<PlugInConfigurationViewItem>, ISupp
             throw new ArgumentException($"{nameof(item.ConfigurationType)} must not be null.", nameof(item));
         }
 
+        await this.RefreshCustomConfigurationAsync(item).ConfigureAwait(true);
+
         var referenceResolver = new ByDataSourceReferenceHandler(this._dataSource);
 
         var configuration = item.Configuration.GetConfiguration(item.ConfigurationType, referenceResolver)
@@ -252,14 +257,14 @@ public class PlugInController : IDataService<PlugInConfigurationViewItem>, ISupp
 
         if (plugInPoint != null)
         {
-            viewItem.PlugInPointName = plugInPoint.Name;
-            viewItem.PlugInPointDescription = plugInPoint.Description;
+            viewItem.PlugInPointName = PlugInPointCaption.Get(plugInPoint.Name);
+            viewItem.PlugInPointDescription = PlugInPointCaption.Get(plugInPoint.Description);
         }
         else if (customPlugInContainer != null)
         {
             var customPlugInInterface = plugInType.GetInterfaces().FirstOrDefault(intf => intf.GetInterfaces().Any(i => i.GetCustomAttribute<CustomPlugInContainerAttribute>() != null));
-            viewItem.PlugInPointName = customPlugInInterface is null ? customPlugInContainer.Name : $"{customPlugInContainer.Name} - {customPlugInInterface.Name}";
-            viewItem.PlugInPointDescription = customPlugInContainer.Description;
+            viewItem.PlugInPointName = customPlugInInterface is null ? PlugInPointCaption.Get(customPlugInContainer.Name) : $"{PlugInPointCaption.Get(customPlugInContainer.Name)} - {customPlugInInterface.Name}";
+            viewItem.PlugInPointDescription = PlugInPointCaption.Get(customPlugInContainer.Description);
         }
         else
         {
@@ -332,6 +337,32 @@ public class PlugInController : IDataService<PlugInConfigurationViewItem>, ISupp
         this.DataChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    /// <summary>
+    /// Refreshes the custom configuration of the item with the persisted one.
+    /// </summary>
+    /// <remarks>
+    /// The data source keeps the configuration which it loaded first, but a plugin may change its own
+    /// configuration on the game server, e.g. the bot feature clears its "Reset bots" flag after a reset.
+    /// Without refreshing, the dialog would show the outdated values, and saving it would write them back.
+    /// </remarks>
+    /// <param name="item">The item.</param>
+    private async ValueTask RefreshCustomConfigurationAsync(PlugInConfigurationViewItem item)
+    {
+        try
+        {
+            using var context = this._persistenceContextProvider.CreateNewTypedContext(typeof(PlugInConfiguration), false);
+            if (await context.GetByIdAsync<PlugInConfiguration>(item.Id).ConfigureAwait(true) is { } persisted
+                && persisted.CustomConfiguration != item.Configuration.CustomConfiguration)
+            {
+                item.Configuration.CustomConfiguration = persisted.CustomConfiguration;
+            }
+        }
+        catch (NotImplementedException)
+        {
+            // Ignored.
+        }
+    }
+
     private bool FilterByTypeName(Type plugInType)
     {
         return string.IsNullOrWhiteSpace(this.TypeFilter) || (plugInType.FullName ?? plugInType.Name).Contains(this.TypeFilter, StringComparison.InvariantCultureIgnoreCase);
@@ -339,7 +370,14 @@ public class PlugInController : IDataService<PlugInConfigurationViewItem>, ISupp
 
     private bool FilterByName(Type plugInType)
     {
-        return string.IsNullOrWhiteSpace(this.NameFilter) || GetPlugInName(plugInType).Contains(this.NameFilter, StringComparison.InvariantCultureIgnoreCase);
+        if (string.IsNullOrWhiteSpace(this.NameFilter))
+        {
+            return true;
+        }
+
+        var description = plugInType.GetCustomAttribute<DisplayAttribute>()?.GetDescription();
+        return GetPlugInName(plugInType).Contains(this.NameFilter, StringComparison.InvariantCultureIgnoreCase)
+            || (description?.Contains(this.NameFilter, StringComparison.InvariantCultureIgnoreCase) ?? false);
     }
 
     private bool FilterByPoint(Type plugInType)

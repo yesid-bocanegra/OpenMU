@@ -442,10 +442,10 @@
     <value>NIGHTMARE has appeared! Defeat him to claim victory!</value>
   </data>
   <data name="KanturuNightmareTeleport2" xml:space="preserve">
-    <value>Nightmare has teleported! He recovers his full strength!</value>
+    <value>Nightmare has teleported! Don't let him escape!</value>
   </data>
   <data name="KanturuNightmareTeleport3" xml:space="preserve">
-    <value>Nightmare teleports again! He is more powerful than ever!</value>
+    <value>Nightmare teleports again! Keep up the attack!</value>
   </data>
   <data name="KanturuNightmareTeleport4" xml:space="preserve">
     <value>Nightmare is at his last stand! Finish him!</value>
@@ -485,6 +485,27 @@
   </data>
   <data name="MiniGameCantStartWithLessThanPlayers" xml:space="preserve">
     <value>Can't start with less than {0} players.</value>
+  </data>
+  <data name="SkipWaitNotInMiniGame" xml:space="preserve">
+    <value>You need to be inside a mini game event to skip the waiting time.</value>
+  </data>
+  <data name="SkipWaitRequested" xml:space="preserve">
+    <value>The current waiting time was skipped.</value>
+  </data>
+  <data name="SkipWaitAnnouncedFormat" xml:space="preserve">
+    <value>The waiting time was skipped by {0}. The event continues!</value>
+  </data>
+  <data name="SkipWaitNothingToSkip" xml:space="preserve">
+    <value>There is currently no waiting time to skip. The event is already running.</value>
+  </data>
+  <data name="MiniGameForceRestartFormat" xml:space="preserve">
+    <value>The running {0} event was stopped. A new run will start soon.</value>
+  </data>
+  <data name="MiniGameForceStartInitiatedFormat" xml:space="preserve">
+    <value>{0} will start soon.</value>
+  </data>
+  <data name="KillAllMonstersFormat" xml:space="preserve">
+    <value>Killed {0} monster(s).</value>
   </data>
   <data name="TalkingNotImplementedFormat" xml:space="preserve">
     <value>Talking to this NPC ({0}, {1}) is not implemented yet.</value>
@@ -557,6 +578,24 @@
   </data>
   <data name="ItemIsBoundToInventoryOfCharacter" xml:space="preserve">
     <value>This item is bound to the inventory of this character.</value>
+  </data>
+  <data name="ItemCannotBeDropped" xml:space="preserve">
+    <value>This item can't be dropped.</value>
+  </data>
+  <data name="ItemCannotBeRepaired" xml:space="preserve">
+    <value>This item can't be repaired.</value>
+  </data>
+  <data name="ItemCannotBeSoldInPersonalStore" xml:space="preserve">
+    <value>This item can't be sold in a personal store.</value>
+  </data>
+  <data name="ItemCannotBeSoldToNpc" xml:space="preserve">
+    <value>This item can't be sold.</value>
+  </data>
+  <data name="ItemCannotBeStored" xml:space="preserve">
+    <value>This item can't be stored in the vault.</value>
+  </data>
+  <data name="ItemCannotBeTraded" xml:space="preserve">
+    <value>This item can't be traded.</value>
   </data>
   <data name="NotEnoughMoneyToSendLetter" xml:space="preserve">
     <value>Not enough Zen to send a letter.</value>
@@ -770,5 +809,105 @@
   </data>
   <data name="CharacterNotStrongEnoughMessage" xml:space="preserve">
     <value>You are not strong enough for this yet.</value>
+  </data>
+  <data name="DoppelgangerIceWalkerAppeared" xml:space="preserve">
+    <value>The Ice Walker appeared! Kill it within one minute, or the following monsters become stronger.</value>
+  </data>
+  <data name="DoppelgangerIceWalkerEscaped" xml:space="preserve">
+    <value>The Ice Walker escaped! The following monsters are stronger.</value>
+  </data>
+  <data name="DoppelgangerIceWalkerKilled" xml:space="preserve">
+    <value>The Ice Walker has been defeated!</value>
+  </data>
+  <data name="RaklionSelupanAppeared" xml:space="preserve">
+    <value>Selupan has appeared. The Hatchery Gates will be closed in {0} minute(s).</value>
+  </data>
+  <data name="RaklionHatcheryClosed" xml:space="preserve">
+    <value>The Hatchery Gate is closed.</value>
+  </data>
+  <data name="RaklionHatcheryOpensIn" xml:space="preserve">
+    <value>The Hatchery Gates will open in {0}.</value>
+  </data>
+  <data name="RaklionHatcheryIsClosed" xml:space="preserve">
+    <value>The Hatchery Gate is closed, you cannot enter.</value>
+  </data>
+  <data name="RaklionHatcheryOpened" xml:space="preserve">
+    <value>The Hatchery Gate is opened.</value>
+  </data>
+  <data name="RaklionSelupanDefeated" xml:space="preserve">
+    <value>{0} defeated Selupan! The Hatchery Gates will open in {1}.</value>
+  </data>
+  <data name="RaklionBattleFailed" xml:space="preserve">
+    <value>The battle against Selupan has failed. The Hatchery Gates will open in {0}.</value>
+  </data>
+  <data name="RaklionDurationHoursMinutes" xml:space="preserve">
+    <value>{0} hour(s) {1} minute(s)</value>
+  </data>
+  <data name="RaklionDurationMinutes" xml:space="preserve">
+    <value>{0} minute(s)</value>
+  </data>
+  <data name="ImperialGuardianLevelTooLow" xml:space="preserve">
+    <value>You need at least level {0} to enter the Fortress of Imperial Guardian.</value>
+  </data>
+  <data name="GensBattleZoneMembersOnly" xml:space="preserve">
+    <value>Only members of a gens can enter the battle zone.</value>
+  </data>
+  <data name="GensContributionGainedFormat" xml:space="preserve">
+    <value>You gained {0} contribution points.</value>
+  </data>
+  <data name="GensContributionLostFormat" xml:space="preserve">
+    <value>You lost {0} contribution points.</value>
+  </data>
+  <data name="GensKillAbuseWarningFormat" xml:space="preserve">
+    <value>You killed {0} {1} times recently. From {2} kills, you get no contribution points for {0} anymore.</value>
+  </data>
+  <data name="GensKillAbuseLimitFormat" xml:space="preserve">
+    <value>You killed {0} too often recently, so you get no contribution points for it.</value>
+  </data>
+  <data name="GensNoPartyWithOtherGens" xml:space="preserve">
+    <value>You cannot form a party with a member of the opposing gens.</value>
+  </data>
+  <data name="GensNoPartyInBattleZone" xml:space="preserve">
+    <value>You cannot form a party within a battle zone.</value>
+  </data>
+  <data name="GensPartyLeftInBattleZone" xml:space="preserve">
+    <value>Parties are not activated within a battle zone, so you left your party.</value>
+  </data>
+  <data name="GensRequiredToCreateGuild" xml:space="preserve">
+    <value>You have to be a member of a gens to create a guild.</value>
+  </data>
+  <data name="EquipmentHasChangedMessage" xml:space="preserve">
+    <value>The equipment has been changed.</value>
+  </data>
+  <data name="SpeedHackWarning" xml:space="preserve">
+    <value>Warning: Unusual activity detected (speed check). Repeated violations will result in account restriction.</value>
+  </data>
+  <data name="SummonPartyCountdownFormat" xml:space="preserve">
+    <value>Summoning in {0} second(s)...</value>
+  </data>
+  <data name="SummonPartyCanceled" xml:space="preserve">
+    <value>Summoning canceled.</value>
+  </data>
+  <data name="CharacterInfoAccountNameFormat" xml:space="preserve">
+    <value>Account Name: {0}</value>
+  </data>
+  <data name="CharacterInfoFormat" xml:space="preserve">
+    <value>Id: {0}
+Name: {1}
+Class: {2}
+Slot: {3}
+Create Date: {4}
+Exp: {5}
+Level Up Points: {6}
+Master Exp: {7}
+Master Lv Up Points: {8}
+Location: {9}({10}, {11})
+Kill Count: {12}
+State Remaining Seconds: {13}
+State: {14}
+Status: {15}
+Used Fruit Points: {16}
+Used Neg Fruit Points: {17}
+Inventory Extensions: {18}</value>
   </data>
 </root>

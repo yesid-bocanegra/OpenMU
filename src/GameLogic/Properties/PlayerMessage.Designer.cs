@@ -178,6 +178,157 @@ namespace MUnique.OpenMU.GameLogic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account Name: {0}.
+        /// </summary>
+        public static string CharacterInfoAccountNameFormat {
+            get {
+                return ResourceManager.GetString("CharacterInfoAccountNameFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Id: {0}
+        ///Name: {1}
+        ///Class: {2}
+        ///Slot: {3}
+        ///Create Date: {4}
+        ///Exp: {5}
+        ///Level Up Points: {6}
+        ///Master Exp: {7}
+        ///Master Lv Up Points: {8}
+        ///Location: {9}({10}, {11})
+        ///Kill Count: {12}
+        ///State Remaining Seconds: {13}
+        ///State: {14}
+        ///Status: {15}
+        ///Used Fruit Points: {16}
+        ///Used Neg Fruit Points: {17}
+        ///Inventory Extensions: {18}.
+        /// </summary>
+        public static string CharacterInfoFormat {
+            get {
+                return ResourceManager.GetString("CharacterInfoFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Ice Walker appeared! Kill it within one minute, or the following monsters become stronger..
+        /// </summary>
+        public static string DoppelgangerIceWalkerAppeared {
+            get {
+                return ResourceManager.GetString("DoppelgangerIceWalkerAppeared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Ice Walker escaped! The following monsters are stronger..
+        /// </summary>
+        public static string DoppelgangerIceWalkerEscaped {
+            get {
+                return ResourceManager.GetString("DoppelgangerIceWalkerEscaped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Ice Walker has been defeated!.
+        /// </summary>
+        public static string DoppelgangerIceWalkerKilled {
+            get {
+                return ResourceManager.GetString("DoppelgangerIceWalkerKilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Only members of a gens can enter the battle zone..
+        /// </summary>
+        public static string GensBattleZoneMembersOnly {
+            get {
+                return ResourceManager.GetString("GensBattleZoneMembersOnly", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You gained {0} contribution points..
+        /// </summary>
+        public static string GensContributionGainedFormat {
+            get {
+                return ResourceManager.GetString("GensContributionGainedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You lost {0} contribution points..
+        /// </summary>
+        public static string GensContributionLostFormat {
+            get {
+                return ResourceManager.GetString("GensContributionLostFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You killed {0} too often recently, so you get no contribution points for it..
+        /// </summary>
+        public static string GensKillAbuseLimitFormat {
+            get {
+                return ResourceManager.GetString("GensKillAbuseLimitFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You killed {0} {1} times recently. From {2} kills, you get no contribution points for {0} anymore..
+        /// </summary>
+        public static string GensKillAbuseWarningFormat {
+            get {
+                return ResourceManager.GetString("GensKillAbuseWarningFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot form a party within a battle zone..
+        /// </summary>
+        public static string GensNoPartyInBattleZone {
+            get {
+                return ResourceManager.GetString("GensNoPartyInBattleZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You cannot form a party with a member of the opposing gens..
+        /// </summary>
+        public static string GensNoPartyWithOtherGens {
+            get {
+                return ResourceManager.GetString("GensNoPartyWithOtherGens", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Parties are not activated within a battle zone, so you left your party..
+        /// </summary>
+        public static string GensPartyLeftInBattleZone {
+            get {
+                return ResourceManager.GetString("GensPartyLeftInBattleZone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You have to be a member of a gens to create a guild..
+        /// </summary>
+        public static string GensRequiredToCreateGuild {
+            get {
+                return ResourceManager.GetString("GensRequiredToCreateGuild", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need at least level {0} to enter the Fortress of Imperial Guardian..
+        /// </summary>
+        public static string ImperialGuardianLevelTooLow {
+            get {
+                return ResourceManager.GetString("ImperialGuardianLevelTooLow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your {0} has been destroyed! You are falling out of the Kanturu Refinery Tower..
         /// </summary>
         public static string KanturuRequiredItemDestroyed {
@@ -610,6 +761,15 @@ namespace MUnique.OpenMU.GameLogic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The equipment has been changed..
+        /// </summary>
+        public static string EquipmentHasChangedMessage {
+            get {
+                return ResourceManager.GetString("EquipmentHasChangedMessage", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Oops, some error happened during sending the Letter..
         /// </summary>
         public static string ErrorDuringSendingLetter {
@@ -817,6 +977,60 @@ namespace MUnique.OpenMU.GameLogic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This item can't be dropped..
+        /// </summary>
+        public static string ItemCannotBeDropped {
+            get {
+                return ResourceManager.GetString("ItemCannotBeDropped", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item can't be repaired..
+        /// </summary>
+        public static string ItemCannotBeRepaired {
+            get {
+                return ResourceManager.GetString("ItemCannotBeRepaired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item can't be sold in a personal store..
+        /// </summary>
+        public static string ItemCannotBeSoldInPersonalStore {
+            get {
+                return ResourceManager.GetString("ItemCannotBeSoldInPersonalStore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item can't be sold..
+        /// </summary>
+        public static string ItemCannotBeSoldToNpc {
+            get {
+                return ResourceManager.GetString("ItemCannotBeSoldToNpc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item can't be stored in the vault..
+        /// </summary>
+        public static string ItemCannotBeStored {
+            get {
+                return ResourceManager.GetString("ItemCannotBeStored", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This item can't be traded..
+        /// </summary>
+        public static string ItemCannotBeTraded {
+            get {
+                return ResourceManager.GetString("ItemCannotBeTraded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This item is bound to the inventory of this character..
         /// </summary>
         public static string ItemIsBoundToInventoryOfCharacter {
@@ -984,6 +1198,150 @@ namespace MUnique.OpenMU.GameLogic.Properties {
         public static string MiniGameCantStartWithLessThanPlayers {
             get {
                 return ResourceManager.GetString("MiniGameCantStartWithLessThanPlayers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Killed {0} monster(s)..
+        /// </summary>
+        public static string KillAllMonstersFormat {
+            get {
+                return ResourceManager.GetString("KillAllMonstersFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The battle against Selupan has failed. The Hatchery Gates will open in {0}..
+        /// </summary>
+        public static string RaklionBattleFailed {
+            get {
+                return ResourceManager.GetString("RaklionBattleFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} hour(s) {1} minute(s).
+        /// </summary>
+        public static string RaklionDurationHoursMinutes {
+            get {
+                return ResourceManager.GetString("RaklionDurationHoursMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} minute(s).
+        /// </summary>
+        public static string RaklionDurationMinutes {
+            get {
+                return ResourceManager.GetString("RaklionDurationMinutes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Hatchery Gate is closed..
+        /// </summary>
+        public static string RaklionHatcheryClosed {
+            get {
+                return ResourceManager.GetString("RaklionHatcheryClosed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Hatchery Gate is closed, you cannot enter..
+        /// </summary>
+        public static string RaklionHatcheryIsClosed {
+            get {
+                return ResourceManager.GetString("RaklionHatcheryIsClosed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Hatchery Gate is opened..
+        /// </summary>
+        public static string RaklionHatcheryOpened {
+            get {
+                return ResourceManager.GetString("RaklionHatcheryOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The Hatchery Gates will open in {0}..
+        /// </summary>
+        public static string RaklionHatcheryOpensIn {
+            get {
+                return ResourceManager.GetString("RaklionHatcheryOpensIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selupan has appeared. The Hatchery Gates will be closed in {0} minute(s)..
+        /// </summary>
+        public static string RaklionSelupanAppeared {
+            get {
+                return ResourceManager.GetString("RaklionSelupanAppeared", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} defeated Selupan! The Hatchery Gates will open in {1}..
+        /// </summary>
+        public static string RaklionSelupanDefeated {
+            get {
+                return ResourceManager.GetString("RaklionSelupanDefeated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You need to be inside a mini game event to skip the waiting time..
+        /// </summary>
+        public static string SkipWaitNotInMiniGame {
+            get {
+                return ResourceManager.GetString("SkipWaitNotInMiniGame", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The current waiting time was skipped..
+        /// </summary>
+        public static string SkipWaitRequested {
+            get {
+                return ResourceManager.GetString("SkipWaitRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The waiting time was skipped by {0}. The event continues!..
+        /// </summary>
+        public static string SkipWaitAnnouncedFormat {
+            get {
+                return ResourceManager.GetString("SkipWaitAnnouncedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is currently no waiting time to skip. The event is already running..
+        /// </summary>
+        public static string SkipWaitNothingToSkip {
+            get {
+                return ResourceManager.GetString("SkipWaitNothingToSkip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The running {0} event was stopped. A new run will start soon..
+        /// </summary>
+        public static string MiniGameForceRestartFormat {
+            get {
+                return ResourceManager.GetString("MiniGameForceRestartFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} will start soon..
+        /// </summary>
+        public static string MiniGameForceStartInitiatedFormat {
+            get {
+                return ResourceManager.GetString("MiniGameForceStartInitiatedFormat", resourceCulture);
             }
         }
         
@@ -1681,6 +2039,15 @@ namespace MUnique.OpenMU.GameLogic.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Warning: Unusual activity detected (speed check). Repeated violations will result in account restriction..
+        /// </summary>
+        public static string SpeedHackWarning {
+            get {
+                return ResourceManager.GetString("SpeedHackWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Stacked Jewel not found..
         /// </summary>
         public static string StackedJewelNotFound {
@@ -1695,6 +2062,24 @@ namespace MUnique.OpenMU.GameLogic.Properties {
         public static string StatPointInfo {
             get {
                 return ResourceManager.GetString("StatPointInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summoning canceled..
+        /// </summary>
+        public static string SummonPartyCanceled {
+            get {
+                return ResourceManager.GetString("SummonPartyCanceled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Summoning in {0} second(s)....
+        /// </summary>
+        public static string SummonPartyCountdownFormat {
+            get {
+                return ResourceManager.GetString("SummonPartyCountdownFormat", resourceCulture);
             }
         }
         
